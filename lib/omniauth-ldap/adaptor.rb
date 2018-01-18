@@ -60,10 +60,15 @@ module OmniAuth
                     :password => @password
                   }
         config[:auth] = @auth
-        config[:encryption] = {
-          :method => method,
-          :tls_options => @tls_options
-        }
+
+        # Do not apply encryption information if the connection is plain.
+        if method != 'plain'
+          config[:encryption] = {
+            :method => method,
+            :tls_options => @tls_options
+          }
+        end
+
         @connection = Net::LDAP.new(config)
       end
 
